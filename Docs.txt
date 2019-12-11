@@ -1,0 +1,15 @@
+Comandos:
+Start nos containers:
+    docker-compose up
+Build dos containers:
+    docker-compose up --Build
+Acessar container:
+    docker exec -it ${nome do container} bash
+Listar Containers Rodando:
+    docker ps
+Listar Todos Containers:
+    docker ps -a
+Parar todos containers:
+    docker-compose down
+Parar container:
+    docker stop ${nome do container}
