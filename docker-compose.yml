@@ -53,5 +53,26 @@ services:
       - "8081:8081"    
     depends_on:
       - apigateway
-      - website 
+      - website
+  landing:
+    image: nginx:1.13
+    container_name: landing-pages
+    volumes:
+      - "../landing-pages:/var/www/html"
+      - "../landing-pages/config-nginx/lp:/etc/nginx/nginx.conf"
+    ports:
+      - "8800:8800"
+    depends_on:
+      - php
+
+  # Application service layer
+  php:
+    container_name: php
+    build:
+      context: ../landing-pages/php
+    volumes:
+      - "../landing-pages:/var/www/html"
+    ports:
+      - "9000:9000"
+  
    
