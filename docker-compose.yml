@@ -17,6 +17,7 @@ services:
   api:
     network_mode: host
     container_name: api
+    restart: always
     build: ../api
     environment:
       - "TZ=America/Sao_Paulo"
@@ -30,6 +31,7 @@ services:
   apigateway:
     network_mode: host
     container_name: api-gateway
+    restart: always
     build: ../api-gateway
     command: yarn dev
     volumes:
@@ -41,6 +43,7 @@ services:
   admin:
     network_mode: host
     container_name: admin
+    restart: always
     build: ../admin
     command: yarn dev
     environment:
@@ -57,6 +60,7 @@ services:
   landing:
     image: nginx:1.13
     container_name: landing-pages
+    restart: always
     volumes:
       - "../landing-pages:/var/www/html"
       - "../landing-pages/config-nginx/lp:/etc/nginx/nginx.conf"
@@ -74,5 +78,37 @@ services:
       - "../landing-pages:/var/www/html"
     ports:
       - "9000:9000"
+  php-hotsite:
+    container_name: php-hotsite
+    build:
+      context: ../hotsite/php
+    volumes:
+      - "../hotsite:/var/www/html"
+    ports:
+      - "9001:9000"
+    networks: 
+      - hotsite
+    
+  hotsite:
+    image: nginx:1.13
+    container_name: hotsite
+    restart: always
+    volumes:
+      - "../hotsite:/var/www/html"
+      - "../hotsite/config-nginx/lp:/etc/nginx/nginx.conf"
+    ports:
+      - "8082:8080"
+    depends_on:
+      - php-hotsite
+    networks:
+      - hotsite
+      - phphot
   
+
+networks:
+  hotsite:
+  phphot:
+    driver_opts:
+      foo: "1"
+      bar: "2"
    
